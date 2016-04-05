@@ -20,10 +20,10 @@ Then run the following commands to bootstrap your environment.
 
 ::
 
-    git clone https://github.com/juggernaut415/battery
-    cd battery
-    pip install -r requirements/dev.txt
-    python manage.py server
+    git clone https://github.com/juggernaut451/front-end_battery_life
+    cd front-end_battery_life
+    pip install -r requirements.txt
+    python manage.py runserver
 
 You will see a pretty welcome screen.
 
