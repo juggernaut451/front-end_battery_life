@@ -16,7 +16,7 @@ class ClockApp(App):
         Clock.schedule_interval(self.update, 0)
 
     def update(self, nap):
-    	self.root.ids.capacity.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/capacity"])
+    	self.root.ids.capacity.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT0/capacity"])
         """
         if self.sw_started:
             self.sw_seconds += nap
