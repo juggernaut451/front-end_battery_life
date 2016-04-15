@@ -16,17 +16,121 @@ BoxLayout:
 
     BoxLayout:
         orientation: 'horizontal'
+        size_hint: (1, None)
+        spacing: 20
+        height: 150
         Label:
             size_hint_y: None
-            height: 80
-            font_size: 65
-            id: capacity
-            text: '[b]00[/b]%'
+            font_size: 35
+            id: status
+                    
+        Label:
+            id: battery_type
+            text: 'test'
+            size_hint_y: None
+            font_size: 35
 
+        Label:
+            id: battery_model
+            text: 'model'
+            size_hint_y: None
+            font_size: 35
+
+        Label:
+            id: manufacturer
+            size_hint_y: None
+            font_size: 35
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        height: 5
+        padding: 20
+        spacing: 20
         
         Label:
-            id: time1
-            text: 'anotheu'
+            id: text_status
+            text: 'Status'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_battery_type
+            text: 'Battery Type'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id:  text_battery_model
+            text: 'Model'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_manufacturer
+            text: 'Manufacturer'
+            font_size: 35
+            color: 0, 0, 255
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        spacing: 20
+        height: 150
+        
+        Label:
+            id: percentage
+            text: 'percentage'
+            size_hint_y: None
+            font_size: 35
+                   
+        Label:
+            id: current_now
+            text: 'test'
+            size_hint_y: None
+            font_size: 35
+
+        Label:
+            id: voltage_now
+            text: 'model'
+            size_hint_y: None
+            font_size: 35
+
+        Label:
+            id: charge_now
+            size_hint_y: None
+            font_size: 35
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        height: 10
+        padding: 20
+        spacing: 20
+        
+        Label:
+            id: text_percentage
+            text: 'Charge'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_current_now
+            text: 'Current'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id:  text_voltage_now
+            text: 'Voltage'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_charge_now
+            text: 'Charge(Energy)'
+            font_size: 35
+            color: 0, 0, 255
 
     BoxLayout:
         height: 90

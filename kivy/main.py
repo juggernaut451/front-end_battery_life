@@ -16,7 +16,15 @@ class ClockApp(App):
         Clock.schedule_interval(self.update, 0)
 
     def update(self, nap):
-    	self.root.ids.capacity.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT0/capacity"])
+
+    	self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/status"])
+    	self.root.ids.battery_type.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/technology"])
+    	self.root.ids.battery_model.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/model_name"])
+    	self.root.ids.manufacturer.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/manufacturer"])
+    	self.root.ids.percentage.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/capacity"]).strip()+"%"
+    	self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/current_now"]))/1000000).strip()+"A"
+        self.root.ids.voltage_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/voltage_now"]))/1000000).strip()+"V"
+        self.root.ids.charge_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/voltage_now"]))/1000000).strip()+"Ah"
         """
         if self.sw_started:
             self.sw_seconds += nap
