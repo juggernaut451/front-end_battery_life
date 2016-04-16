@@ -72,7 +72,7 @@ class ClockApp(App):
         try:
             a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
         except Exception, e:
-            self.charge = "energy"
+            self.file = "energy"
             self.charge = "W"
             self.root.ids.text_last_full_capacity.text = "Last Full Energy"
             self.root.ids.text_capacity_loss_perc.text = "Energy Loss %"
