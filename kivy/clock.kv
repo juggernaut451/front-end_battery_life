@@ -202,20 +202,9 @@ BoxLayout:
 
         RobotoButton:
             id: start_stop
-            text: 'Start'
-            on_press: app.start_stop()
+            text: 'Press To Start'
+            on_press: app.board()
 
-        RobotoButton:
-            id: temp
-            text: 'temperature'
-            on_press: app.temp()
-
-        RobotoButton:
-            id: reset
-            text: 'Reset'
-            on_press: app.reset()
-            background_normal: 'red_button_normal.png'
-            background_down: 'red_button_down.png'
 
     Label:
         id: stopwatch
