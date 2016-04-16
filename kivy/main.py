@@ -17,14 +17,26 @@ class ClockApp(App):
 
     def update(self, nap):
 
-    	self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/status"])
-    	self.root.ids.battery_type.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/technology"])
-    	self.root.ids.battery_model.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/model_name"])
-    	self.root.ids.manufacturer.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/manufacturer"])
-    	self.root.ids.percentage.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/capacity"]).strip()+"%"
-    	self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/current_now"]))/1000000).strip()+"A"
+        try:
+            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/charge_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/charge_full_design"]))/1000000)
+            a = a*100
+            b = 100.00-a
+            print b
+        except Exception, e:
+            raise e
+
+        self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/status"])
+        self.root.ids.battery_type.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/technology"])
+        self.root.ids.battery_model.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/model_name"])
+        self.root.ids.manufacturer.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/manufacturer"])
+        self.root.ids.percentage.text = subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/capacity"]).strip()+"%"
+        self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/current_now"]))/1000000).strip()+"A"
         self.root.ids.voltage_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/voltage_now"]))/1000000).strip()+"V"
         self.root.ids.charge_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/voltage_now"]))/1000000).strip()+"Ah"
+        self.root.ids.design_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/charge_full_design"]))/1000000).strip()+"A"
+        self.root.ids.last_full_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/BAT1/charge_full"]))/1000000)+"A"
+        self.root.ids.last_full_capacity_perc.text = str(a)
+        self.root.ids.capacity_loss_perc.text = str(b)
         """
         if self.sw_started:
             self.sw_seconds += nap

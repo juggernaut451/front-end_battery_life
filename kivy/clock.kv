@@ -132,6 +132,67 @@ BoxLayout:
             font_size: 35
             color: 0, 0, 255
 
+    
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        spacing: 20
+        height: 150
+        
+        Label:
+            id: design_capacity
+            size_hint_y: None
+            font_size: 35
+                   
+        Label:
+            id: last_full_capacity
+            text: 'ae'
+            size_hint_y: None
+            font_size: 35
+
+        Label:
+            id: last_full_capacity_perc
+            text: ''
+            size_hint_y: None
+            font_size: 35
+
+        Label:
+            id: capacity_loss_perc
+            size_hint_y: None
+            font_size: 35
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, None)
+        height: 10
+        padding: 20
+        spacing: 20
+        
+        Label:
+            id: text_design_capacity
+            text: 'Design Capacity'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_last_full_capacity
+            text: 'Last Full Charge'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id:  text_last_full_capacity_perc
+            text: 'Last Full %'
+            font_size: 35
+            color: 0, 0, 255
+
+        Label:
+            id: text_capacity_loss_perc
+            text: 'Capacity Loss %'
+            font_size: 35
+            color: 0, 0, 255
+
+
     BoxLayout:
         height: 90
         orientation: 'horizontal'
