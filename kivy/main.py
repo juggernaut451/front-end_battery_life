@@ -16,6 +16,8 @@ class ClockApp(App):
     sw_started = False
     sw_seconds = 0
     file = ""
+    charge = "charge"
+    unit = "A"
 
 
 
@@ -26,12 +28,13 @@ class ClockApp(App):
     def update(self, nap):
 
         try:
-            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/charge_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/charge_full_design"]))/1000000)
+            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
             a = a*100
             b = 100.00-a
 
         except Exception, e:
             raise e
+
 
         self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/status"])
         self.root.ids.battery_type.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/technology"])
@@ -41,8 +44,8 @@ class ClockApp(App):
         self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/current_now"]))/1000000).strip()+"A"
         self.root.ids.voltage_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"V"
         self.root.ids.charge_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"Ah"
-        self.root.ids.design_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/charge_full_design"]))/1000000).strip()+"A"
-        self.root.ids.last_full_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/charge_full"]))/1000000)+"A"
+        self.root.ids.design_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000).strip()+self.unit
+        self.root.ids.last_full_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)+self.unit
         self.root.ids.last_full_capacity_perc.text = str(a)
         self.root.ids.capacity_loss_perc.text = str(b)
         #self.root.ids.reset.text = "aoeu"
@@ -66,6 +69,13 @@ class ClockApp(App):
               print file+" contains all the battery information"
               #found += 1
         self.file = file     
+        try:
+            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
+        except Exception, e:
+            self.charge = "energy"
+            self.charge = "W"
+            self.root.ids.text_last_full_capacity.text = "Last Full Energy"
+            self.root.ids.text_capacity_loss_perc.text = "Energy Loss %"
 
 
     def temp(self):
