@@ -18,6 +18,7 @@ class ClockApp(App):
     file = ""
     charge = "charge"
     unit = "A"
+    current = "current"
 
 
 
@@ -41,7 +42,7 @@ class ClockApp(App):
         self.root.ids.battery_model.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/model_name"])
         self.root.ids.manufacturer.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/manufacturer"])
         self.root.ids.percentage.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/capacity"]).strip()+"%"
-        self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/current_now"]))/1000000).strip()+"A"
+        self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.current+"_now"]))/1000000).strip()+self.unit
         self.root.ids.voltage_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"V"
         self.root.ids.charge_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"Ah"
         self.root.ids.design_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000).strip()+self.unit
@@ -73,7 +74,8 @@ class ClockApp(App):
             a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
         except Exception, e:
             self.charge = "energy"
-            self.unit = "W"
+            self.current = "energy"
+            self.unit = "Wh"
             self.root.ids.text_last_full_capacity.text = "Last Full Energy"
             self.root.ids.text_capacity_loss_perc.text = "Energy Loss %"
 
