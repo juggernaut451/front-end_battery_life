@@ -8,6 +8,7 @@ import fnmatch,os
 import re,time
 from pyfirmata import *
 from serial.tools.list_ports import comports
+from kivy.garden.graph import Graph
 
 from time import strftime
 
@@ -71,7 +72,7 @@ class ClockApp(App):
               #found += 1
         self.file = file     
         try:
-            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
+            a = (float(subprocess.check_output(["cat", "/sys/class/power_supply/"+file+"/"+self.charge+"_full"]))/1000000)/(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full_design"]))/1000000)
         except Exception, e:
             self.charge = "energy"
             self.current = "energy"
