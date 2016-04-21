@@ -8,9 +8,11 @@ import fnmatch,os
 import re,time
 from pyfirmata import *
 from serial.tools.list_ports import comports
-from kivy.garden.graph import Graph
-
+from math import sin
+from kivy.garden.graph import Graph, MeshLinePlot
+from components.notification import Notification
 from time import strftime
+from serial.tools.list_ports import comports
 
 
 class ClockApp(App):
@@ -20,12 +22,17 @@ class ClockApp(App):
     charge = "charge"
     unit = "A"
     current = "current"
-
+    status_hardware = False
+    board = False
 
 
     def on_start(self):
         self.battery_file()
+        plot = MeshLinePlot(color=[1, 0, 0, 1])
+        plot.points = [(x, sin(x / 10.)) for x in range(0, 101)]
+        self.root.ids.my_graph.add_plot(plot)
         Clock.schedule_interval(self.update, 0)
+        Clock.schedule_interval(self.notify,10)
 
     def update(self, nap):
 
@@ -36,13 +43,23 @@ class ClockApp(App):
 
         except Exception, e:
             raise e
-
-
+     
+        percentage = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/capacity"]).strip()
+        
+        if self.board is False:
+            print "fuck"
+            if int(percentage) > 80:
+                self.board.digital[8].write(0)
+            elif int(percentage) < 60:
+                self.board.digital[8].write(1)
+            elif int(percentage)<80 and int(percentage)>60:
+                self.board.digital[8].write(1)
+            
         self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/status"])
         self.root.ids.battery_type.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/technology"])
         self.root.ids.battery_model.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/model_name"])
         self.root.ids.manufacturer.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/manufacturer"])
-        self.root.ids.percentage.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/capacity"]).strip()+"%"
+        self.root.ids.percentage.text = percentage+"%"
         self.root.ids.current_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.current+"_now"]))/1000000).strip()+self.unit
         self.root.ids.voltage_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"V"
         self.root.ids.charge_now.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/voltage_now"]))/1000000).strip()+"Ah"
@@ -50,6 +67,7 @@ class ClockApp(App):
         self.root.ids.last_full_capacity.text = str(float(subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/"+self.charge+"_full"]))/1000000)+self.unit
         self.root.ids.last_full_capacity_perc.text = str(a)
         self.root.ids.capacity_loss_perc.text = str(b)
+        
         #self.root.ids.reset.text = "aoeu"
         """
         if self.sw_started:
@@ -64,6 +82,12 @@ class ClockApp(App):
     def start_stop(self):
         self.root.ids.start_stop.text = 'Start' if self.sw_started else 'Stop'
         self.sw_started = not self.sw_started
+
+    def notify(self, nap):
+        percentage = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/capacity"]).strip()
+        if int(percentage) < 60:
+            Notification("Battery Status","Please connect the charger").notify()
+            print "test"
 
     def battery_file(self):
         for file in os.listdir('/sys/class/power_supply/'):
@@ -135,10 +159,13 @@ class ClockApp(App):
 
         if not arduinos:
             self.root.ids.start_stop.text = 'No hardware connected !!!'
+            self.status_hardware = False
         else:
             print 'Connected Arduino device(s):'
             for ard in arduinos:
-                self.root.ids.start_stop.text = ard[0], ' at ', ard[1] 
+                self.root.ids.start_stop.text = ard[0], ' at ', ard[1]
+                self.status_hardware = True 
+                self.board = Arduino(ard[1])
         
         
 
