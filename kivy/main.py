@@ -23,7 +23,7 @@ class ClockApp(App):
     unit = "A"
     current = "current"
     status_hardware = False
-    board = False
+    board = None
 
 
     def on_start(self):
@@ -46,13 +46,14 @@ class ClockApp(App):
      
         percentage = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/capacity"]).strip()
         
-        if self.board is False:
-            print "fuck"
+        if self.board is not None:
             if int(percentage) > 80:
                 self.board.digital[8].write(0)
-            elif int(percentage) < 60:
+            if int(percentage) < 60:
+                print "fuck"
                 self.board.digital[8].write(1)
-            elif int(percentage)<80 and int(percentage)>60:
+            if int(percentage)<80 and int(percentage)>60:
+                print "fuck1"
                 self.board.digital[8].write(1)
             
         self.root.ids.status.text = subprocess.check_output(["cat", "/sys/class/power_supply/"+self.file+"/status"])
